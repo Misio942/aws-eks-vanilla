@@ -65,6 +65,12 @@ variable "addon_kubeproxy_version" {
   description = "Versão do Addon do Kube-Proxy"
 }
 
+variable "addon_external_dns_version" {
+  type        = string
+  default     = "v1.11.4-eksbuild.2"
+  description = "Versão do Addon do External DNS"
+}
+
 #### Node Groups - Custom
 
 variable "custom_ami" {

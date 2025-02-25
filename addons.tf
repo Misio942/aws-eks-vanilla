@@ -11,6 +11,23 @@ resource "aws_eks_addon" "cni" {
   ]
 }
 
+module "vpc_cni_irsa_role" {
+  source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = format("%s-vpc-cni-irsa", var.project_name)
+
+  attach_vpc_cni_policy = true
+  vpc_cni_enable_ipv4   = true
+  vpc_cni_enable_ipv6   = false
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.gitlab_oidc.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:vpc-cni-sa"]
+    }
+  }
+}
+
 resource "aws_eks_addon" "coredns" {
   cluster_name = aws_eks_cluster.main.name
   addon_name   = "coredns"
@@ -23,6 +40,8 @@ resource "aws_eks_addon" "coredns" {
     aws_eks_access_entry.nodes
   ]
 }
+
+
 
 resource "aws_eks_addon" "kubeproxy" {
   cluster_name = aws_eks_cluster.main.name
