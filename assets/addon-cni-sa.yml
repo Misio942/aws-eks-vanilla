@@ -1,0 +1,7 @@
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: vpc-cni-sa
+#   namespace: kube-system
+#   annotations:
+#     eks.amazonaws.com/role-arn: arn:aws:iam::835843573380:role/arq-eks-cluster-vpc-cni-irsa

@@ -1,0 +1,58 @@
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+metadata:
+  name: arq-eks-vanilla
+spec:
+  instanceProfile: "arq-eks-vanilla-v3"
+  amiFamily: "AL2023"
+  amiSelectorTerms:
+  - id: ami-03ba8d3b3ca03ad9c
+  securityGroupSelectorTerms:
+  - id: sg-0c1912adbc30ec893
+  subnetSelectorTerms:
+  - id: subnet-088d15c1f0b99b77a
+  - id: subnet-0b54ef8ae3ce54415
+  - id: subnet-095da40954272b08e
+---
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: arq-eks-vanilla
+spec:
+  disruption:
+    consolidationPolicy: WhenEmptyOrUnderutilized
+    consolidateAfter: 1m
+  template:
+    metadata:
+      labels:
+        workload: "etc"
+    spec:
+      requirements:
+        - key: karpenter.k8s.aws/instance-family
+          operator: In
+          values:   
+          - t3
+          - t3a
+
+        - key: karpenter.k8s.aws/instance-size
+          operator: In
+          values:
+          - large
+          - medium
+
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values:
+          - "spot"
+    
+        - key: "topology.kubernetes.io/zone" 
+          operator: In
+          values:
+          - "us-east-1a"
+          - "us-east-1b"
+          - "us-east-1c"          
+          
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: arq-eks-vanilla

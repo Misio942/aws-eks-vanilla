@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-debugger
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: node-debugger
+  template:
+    metadata:
+      labels:
+        name: node-debugger
+    spec:
+      hostPID: true
+      containers:
+      - name: debugger
+        image: nicolaka/netshoot
+        securityContext:
+          privileged: true
+        command: [ "sleep", "infinity" ]
+        volumeMounts:
+        - name: rootfs
+          mountPath: /host
+          readOnly: true
+      volumes:
+      - name: rootfs
+        hostPath:
+          path: /
+
