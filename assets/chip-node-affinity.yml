@@ -23,7 +23,7 @@ spec:
         version: v1
     spec:
       nodeSelector:
-        capacity/arch: x86_64
+        karpenter.sh/nodepool: chip-capacity
 
       affinity:
         nodeAffinity:

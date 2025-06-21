@@ -1,7 +1,7 @@
 module "gitlab_oidc" {
-  source  = "terraform-module/gitlab-oidc-provider/aws"
-  version = "~> 1"
-  role_name = format("%s-gitlab-oidc", var.project_name)
+  source               = "terraform-module/gitlab-oidc-provider/aws"
+  version              = "~> 1"
+  role_name            = format("%s-gitlab-oidc", var.project_name)
   create_oidc_provider = true
   create_oidc_role     = true
 

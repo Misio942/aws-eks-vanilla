@@ -3,6 +3,6 @@ resource "aws_kms_key" "main" {
 }
 
 resource "aws_kms_alias" "main" {
-  name          = format("alias/%s-v2", var.project_name)
+  name          = format("alias/%s-v3", var.project_name)
   target_key_id = aws_kms_key.main.id
 }
